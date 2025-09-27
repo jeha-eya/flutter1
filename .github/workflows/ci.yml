@@ -1,24 +1,42 @@
 name: Flutter CI
 
 on:
-  pull_request:
-    branches: [ main ]
   push:
-    branches: [ main ]
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
+      # Checkout the repository
       - uses: actions/checkout@v2
+
+      # Setup Flutter
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.4' # Change to your Flutter version if different
+          flutter-version: '3.35.4'
+
+      # Check Flutter & Dart versions
+      - name: Check Flutter version
+        run: flutter --version
+
+      # Clean cache just in case
+      - name: Clean Flutter cache
+        run: flutter clean
+
+      # Install dependencies
       - name: Install dependencies
         run: flutter pub get
+
+      # Run tests
       - name: Run tests
         run: flutter test
+
+      # Analyze code
       - name: Analyze code
         run: flutter analyze
-
-
